@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { controller, httpGet, httpPatch, httpPost } from "inversify-express-utils";
-import { CreateUserDto } from "src/logic/dtos/users/create-user.dto";
-import { GetOneUserDto } from "src/logic/dtos/users/get-one-user.dto";
-import { UpdateUserDto } from "src/logic/dtos/users/update-user.dto";
-import { UserService } from "src/logic/services/users.service";
+import { controller, httpDelete, httpGet, httpPatch, httpPost } from "inversify-express-utils";
+import { LoginUserDto } from "../../logic/dtos/users/login-user.dto";
+import { CreateUserDto } from "../../logic/dtos/users/create-user.dto";
+import { GetOneUserDto } from "../../logic/dtos/users/get-one-user.dto";
+import { UpdateUserDto } from "../../logic/dtos/users/update-user.dto";
+import { UserService } from "../../logic/services/users.service";
 import { BaseHttpResponse } from "../lib/base-http-response";
 import { ValidateRequestMiddleware } from "../middleware/validate-request.middleware";
 
@@ -38,6 +39,14 @@ export class UsersController {
         res.status(response.statusCode).json(response);
     }
 
+    @httpPost('/login',ValidateRequestMiddleware.with(LoginUserDto))
+    public async login(req: Request,res:Response){
+        await this._service.login(req.body)
+        const response = BaseHttpResponse.success({},201)
+
+        res.status(response.statusCode).json(response)
+    }
+
     @httpPatch('/:id',ValidateRequestMiddleware.withParams(UpdateUserDto))
     public async update(req: Request,res:Response){
         await this._service.updateOne(req.body)
@@ -47,5 +56,12 @@ export class UsersController {
         res.status(response.statusCode).json(response);
     }
 
+    @httpDelete('/:id',ValidateRequestMiddleware.withParams(GetOneUserDto))
+    public async delete(req: Request,res:Response){
+        await this._service.deleteOne(req.body)
 
+        const response = BaseHttpResponse.success({},200)
+
+        res.status(response.statusCode).json(response);
+    }
 }

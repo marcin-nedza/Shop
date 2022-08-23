@@ -10,9 +10,15 @@ export class UserRepository {
     return this._dbContext.models.user.findMany()
   }
 
-  public async findOne(id:IUserModel['id']){
+  public async findOneById(id: IUserModel["id"]) {
     return this._dbContext.models.user.findUnique({
-        where:{id}
+      where: { id },
+    })
+  }
+
+  public async findByEmail(email: string) {
+    return this._dbContext.models.user.findUnique({
+      where: { email },
     })
   }
   public async create(entity: Omit<IUserModel, "id">) {
@@ -37,4 +43,12 @@ export class UserRepository {
       },
     })
   }
+
+  public async deleteOne(id: IUserModel["id"]) {
+    return this._dbContext.models.user.delete({
+      where: { id },
+    })
+  }
+
+  // public async verifyPassword(password:string)
 }
