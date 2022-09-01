@@ -1,6 +1,6 @@
 import { injectable } from "inversify"
-import { DBContext } from "./db.context"
-import { IUserModel } from "./user.model"
+import { DBContext } from "../db.context"
+import { User } from "@prisma/client"
 
 @injectable()
 export class UserRepository {
@@ -10,7 +10,7 @@ export class UserRepository {
     return this._dbContext.models.user.findMany()
   }
 
-  public async findOneById(id: IUserModel["id"]) {
+  public async findOneById(id: User["id"]) {
     return this._dbContext.models.user.findUnique({
       where: { id },
     })
@@ -21,18 +21,18 @@ export class UserRepository {
       where: { email },
     })
   }
-  public async create(entity: Omit<IUserModel, "id">) {
+  public async create(entity: Omit<User, "id">) {
     return this._dbContext.models.user.create({ data: entity })
   }
 
-  public async updateOne(payload: Partial<IUserModel>) {
+  public async updateOne(payload: Partial<User>) {
     const foundUser = await this._dbContext.models.user.findUnique({
       where: {
         id: payload.id,
       },
     })
     if (!foundUser) {
-      throw new Error("User does not exist")
+      throw new Error("No user found")
     }
     return this._dbContext.models.user.update({
       where: { id: payload.id },
@@ -44,7 +44,7 @@ export class UserRepository {
     })
   }
 
-  public async deleteOne(id: IUserModel["id"]) {
+  public async deleteOne(id: User["id"]) {
     return this._dbContext.models.user.delete({
       where: { id },
     })

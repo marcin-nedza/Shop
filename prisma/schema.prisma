@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -11,15 +12,52 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  username String 
-  email String @unique
-  password String 
-  role Role @default(BASIC) 
+  id       String @id @default(uuid())
+  username String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+  Cart     Cart?
+}
 
+//TODO: Add photo datatype
+//plu: price lookup code
+
+model Product {
+  id          String        @id @default(uuid())
+  name        String
+  price       Float
+  plu         Int           @unique
+  unit        Unit          @default(gram)
+  category    String
+  photo       Bytes?
+  singleOrder SingleOrder[]
+}
+
+model SingleOrder {
+  id          String  @id @default(uuid())
+  amount      Int
+  description String?
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+  cart        Cart    @relation(fields: [cartId], references: [id])
+  cartId      String
+}
+
+model Cart {
+  id           String        @id @default(uuid())
+  singleOrders SingleOrder[]
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  summary      Int           @default(0)
 }
 
 enum Role {
-  BASIC
+  USER
   ADMIN
+}
+
+enum Unit {
+  gram
+  pcs
 }

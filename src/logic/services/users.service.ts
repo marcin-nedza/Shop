@@ -1,12 +1,14 @@
 import { injectable } from "inversify"
-import { UserRepository } from "../../data/user.repository"
-import { CreateUserDto } from "../dtos/users/create-user.dto"
-import { UserDto } from "../dtos/users/user.dto"
 import bcrypt from "bcryptjs"
-import { UpdateUserDto } from "../dtos/users/update-user.dto"
-import { GetOneUserDto } from "../dtos/users/get-one-user.dto"
-import { CouldNotFindUserException } from "../exceptions/could-not-find-user.exception"
-import { LoginUserDto } from "../dtos/users/login-user.dto"
+import { CouldNotFindUserException, GenericError } from "../exceptions"
+import { UserRepository } from "../../data/repositories"
+import {
+  CreateUserDto,
+  GetOneUserDto,
+  SignInUserDto,
+  UpdateUserDto,
+  UserDto,
+} from "../dtos/users"
 @injectable()
 export class UserService {
   public constructor(private readonly _userRepo: UserRepository) {}
@@ -25,9 +27,11 @@ export class UserService {
     }
     return UserDto.from(user)
   }
+
   public async hashPassword(password: string) {
     return await bcrypt.hash(password, bcrypt.genSaltSync(5))
   }
+
   public async create(createUserDto: CreateUserDto) {
     const hashedPassword = await this.hashPassword(createUserDto.password)
     const createdUser = await this._userRepo.create({
@@ -52,21 +56,17 @@ export class UserService {
     return true
   }
 
-  public async verifyPassword(payload: LoginUserDto) {
-    const foundUser = await this._userRepo.findByEmail(payload.email)
-    if (!foundUser) {
+  public async verifyPassword(payload: SignInUserDto) {
+    const user = await this._userRepo.findByEmail(payload.email)
+    if (!user) {
       throw new CouldNotFindUserException()
     }
 
-    return bcrypt.compare(payload.password, foundUser.password)
-  }
-
-  public async login(loginUserDto: LoginUserDto) {
-    const user = await this.verifyPassword(loginUserDto)
-
-    if(!user){
-        throw new Error('Wrong password / email')
+    const isValid = await bcrypt.compare( payload.password,user.password)
+    if (!isValid) {
+      throw new GenericError("Invalid password")
     }
-    return true
+    return user
+    
   }
 }

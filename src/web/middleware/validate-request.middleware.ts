@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express"
 import { BaseMiddleware } from "../lib/base-middleware"
 
 export class ValidateRequestMiddleware extends BaseMiddleware {
   public constructor(
     private readonly _DtoClass: { from: any },
-    private readonly _withParams = false
+    private readonly _withParams = false,
+    private readonly _withParamsAndQuery = false,
   ) {
     super()
   }
@@ -20,6 +22,14 @@ export class ValidateRequestMiddleware extends BaseMiddleware {
         ...req.params,
       }
     }
+    if(this._withParamsAndQuery){
+      console.log('asdasd222222')
+      req.body = {
+        ...req.body,
+        ...req.query,
+        ...req.params,
+        }
+    }
     req.body = this._DtoClass.from(req.body)
     next()
   }
@@ -31,4 +41,7 @@ export class ValidateRequestMiddleware extends BaseMiddleware {
   public static withParams(dto: any) {
     return new ValidateRequestMiddleware(dto, true).execute
   }
+  public static withParamsAndQuery(dto: any) {
+    return new ValidateRequestMiddleware(dto,false, true).execute
+    }
 }
