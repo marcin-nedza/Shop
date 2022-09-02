@@ -49,7 +49,7 @@ model Cart {
   singleOrders SingleOrder[]
   userId       String        @unique
   user         User          @relation(fields: [userId], references: [id])
-  summary      Int           @default(0)
+  summary      Float           @default(0)
 }
 
 enum Role {

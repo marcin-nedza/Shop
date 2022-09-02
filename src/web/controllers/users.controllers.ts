@@ -9,7 +9,7 @@ import {
 import { CreateUserDto } from "../../logic/dtos/users/create-user.dto"
 import { GetOneUserDto } from "../../logic/dtos/users/get-one-user.dto"
 import { UpdateUserDto } from "../../logic/dtos/users/update-user.dto"
-import { UserService } from "../../logic/services/users.service"
+import { UserService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import { ValidateRequestMiddleware } from "../middleware/validate-request.middleware"
 

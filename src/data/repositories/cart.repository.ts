@@ -12,11 +12,20 @@ export class CartRepository {
       where: {
         userId: id,
       },
-      include:{
+      include: {
         singleOrders: {
-          include:{product:true}
+          // include: { product: true },
+          select:{id: true,amount: true,product: true}
         },
-      }
+      },
+    })
+  }
+
+  public async findSingleOrder(id: SingleOrder["id"]) {
+    return this._dbContext.models.singleOrder.findUnique({
+      where: {
+        id,
+      },
     })
   }
 
@@ -50,12 +59,35 @@ export class CartRepository {
     })
   }
 
-  public async removeSingleOrder(id:SingleOrder["id"]) {
-    const singleOrder=await this._dbContext.models.singleOrder.findUnique({where:{id}})
-    if(!singleOrder){
-      throw new CouldNotFindException('No single order found')
-    }
-    return this._dbContext.models.singleOrder.delete({where:{id:id}})
+  public async updateSummary({
+    id,
+    summary,
+  }: {
+    id: Cart["id"]
+    summary: Cart["summary"]
+  }) {
+    console.log("repo", id, summary)
+    return this._dbContext.models.cart.update({
+      where: { id },
+      data: {
+        summary: summary,
+      },
+    })
   }
 
+  public async removeSingleOrder(id: SingleOrder["id"]) {
+    const singleOrder = await this._dbContext.models.singleOrder.findUnique({
+      where: { id },
+    })
+    if (!singleOrder) {
+      throw new CouldNotFindException("No single order found")
+    }
+    return this._dbContext.models.singleOrder.delete({ where: { id: id } })
+  }
+
+  public async removeAllOrders(id: Cart["id"]) {
+    return this._dbContext.models.singleOrder.deleteMany({
+      where: { cartId: id },
+    })
+  }
 }

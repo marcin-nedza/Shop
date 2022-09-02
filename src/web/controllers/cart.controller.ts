@@ -9,9 +9,9 @@ import {
   AddToCartDto,
   CreateCartDto,
   GetCartDto,
-  GetSingleOrderDto,
+  RemoveSingleOrderDto,
 } from "../../logic/dtos/cart"
-import { CartService } from "../../logic/services/cart.service"
+import { CartService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
   AttachUserId,
@@ -19,6 +19,8 @@ import {
   RequireUserMiddleware,
   ValidateRequestMiddleware,
 } from "../middleware"
+
+
 
 @controller(
   "/cart",
@@ -63,9 +65,12 @@ export class CartController {
     res.status(response.statusCode).json(response)
   }
 
+
+
   @httpDelete(
-    "/:id",
-    ValidateRequestMiddleware.withParams(GetSingleOrderDto)
+    "/:id/:singleOrderId/removeOne",
+    AttachUserId.attach,
+    ValidateRequestMiddleware.withParams(RemoveSingleOrderDto)
   )
   public async removeSingleOrder(req: Request, res: Response) {
     await this._cartService.removeSingleOrderFromCart(req.body)
@@ -74,4 +79,13 @@ export class CartController {
 
     res.status(response.statusCode).json(response)
   }
+
+  @httpDelete('/all',AttachUserId.attach,ValidateRequestMiddleware.with(GetCartDto))
+  public async removeAllOrders(req: Request, res: Response) {
+    await this._cartService.removeAllOrders(req.body)
+
+    const response = BaseHttpResponse.success({})
+
+    res.status(response.statusCode).json(response)
+    }
 }

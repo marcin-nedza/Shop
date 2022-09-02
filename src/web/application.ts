@@ -2,7 +2,12 @@ import express, { NextFunction, Request, Response } from "express"
 import { Container } from "inversify"
 import { InversifyExpressServer } from "inversify-express-utils"
 import { DBContext } from "../../src/data/db.context"
-import { UserService } from "../../src/logic/services/users.service"
+import {
+  UserService,
+  AuthenticationService,
+  CartService,
+  ProductService,
+} from "../../src/logic/services"
 import {
   Application,
   IAbstractApplicationOptions,
@@ -19,10 +24,7 @@ import {
   GenericError,
 } from "../logic/exceptions"
 import { BaseHttpResponse } from "./lib/base-http-response"
-import { AuthenticationService } from "../logic/services/authentication.service"
-import { ProductService } from "../logic/services/product.service"
 import { JwtUtils } from "../logic/utils/jwt-utils"
-import { CartService } from "../logic/services/cart.service"
 
 import "./controllers/users.controllers"
 import "./controllers/authentication.controller"
@@ -78,6 +80,10 @@ export class App extends Application {
           return res.status(response.statusCode).json(response)
         }
 
+        if(err instanceof Error){
+          const response = BaseHttpResponse.failed(err.message, 500)
+          return res.status(response.statusCode).json(response)
+        }
         next()
       })
     })

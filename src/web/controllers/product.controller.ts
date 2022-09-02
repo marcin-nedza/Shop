@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { controller, httpDelete, httpGet, httpPatch, httpPost } from "inversify-express-utils"
 import { CreateProductDto, GetProductByCategoryDto, GetProductByNameDto, GetProductDto, UpdateProductDto } from "../../logic/dtos/products"
-import { ProductService } from "../../logic/services/product.service"
+import { ProductService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
   CheckRoleMiddleware,

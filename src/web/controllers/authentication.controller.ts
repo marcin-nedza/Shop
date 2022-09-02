@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { controller, httpGet, httpPost } from "inversify-express-utils"
 import { SignInUserDto } from "../../logic/dtos/users"
-import { AuthenticationService } from "../../logic/services/authentication.service"
+import { AuthenticationService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
     CheckRoleMiddleware,
