@@ -23,7 +23,6 @@ export class ValidateRequestMiddleware extends BaseMiddleware {
       }
     }
     if(this._withParamsAndQuery){
-      console.log('asdasd222222')
       req.body = {
         ...req.body,
         ...req.query,

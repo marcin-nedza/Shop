@@ -10,7 +10,8 @@ export class DeserializeUserMiddleware extends BaseMiddleware {
 
   public async execute(req: Request, res: Response, next: NextFunction) {
     try {
-      const accessToken = req.headers.authorization?.replace(/^Bearer\s/, "")
+      const accessToken = req.headers.cookie?.replace(/^Bearer\s?=/, "")
+      console.log(accessToken)
       if (!accessToken) {
         return res
           .status(401)

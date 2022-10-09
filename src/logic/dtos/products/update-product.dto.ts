@@ -8,7 +8,7 @@ export class UpdateProductDto{
         public plu?: number,
         public unit?:'gram'|'pcs',
         public category? : string,
-        public photo?:Buffer
+        public photo?:string
         
     ){}
 

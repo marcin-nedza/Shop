@@ -2,6 +2,7 @@ import { injectable } from "inversify"
 import { DBContext } from "../db.context"
 import { Product } from "@prisma/client"
 import { CouldNotFindException } from "../../logic/exceptions"
+import { Cloudinary } from "../../web/lib/cloudinary"
 @injectable()
 export class ProductRepository {
   public constructor(private readonly _dbContext: DBContext) {}
@@ -62,6 +63,8 @@ export class ProductRepository {
       },
     })
   }
+
+
 
   public async deleteOne(id: Product["id"]) {
     const foundProduct = await this._dbContext.models.product.findUnique({

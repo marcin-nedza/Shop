@@ -1,9 +1,19 @@
 import { Container, interfaces } from "inversify";
 
 
+export enum MorganMode {
+    DEV='dev',
+    COMMON='common',
+    COMBINED='combined',
+    SHORT='short',
+    TINY='tiny'
+}
 
 export interface IAbstractApplicationOptions {
     containerOpts:interfaces.ContainerOptions
+    morgan:{
+        mode:MorganMode
+    }
 }
 
 export abstract class Application {

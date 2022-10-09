@@ -10,13 +10,16 @@ export class CreateUserDto {
 
   public static from(body: Partial<CreateUserDto>) {
     if (!body.username) {
-      throw new GenericError("name is required")
+      throw new GenericError("Name is required")
     }
     if (!body.email) {
-      throw new GenericError("email is required")
+      throw new GenericError("Email is required")
+    }
+    if(!body.email.includes('@')){
+      throw new GenericError("Email is invalid")
     }
     if (!body.password) {
-      throw new GenericError('password is required')
+      throw new GenericError('Password is required')
     }
   
     return new CreateUserDto(body.username, body.email ,body.password,body.role)

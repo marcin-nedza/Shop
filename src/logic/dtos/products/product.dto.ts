@@ -8,7 +8,7 @@ export class ProductDto {
     public readonly plu: number,
     public readonly unit: "gram" | "pcs",
     public readonly category: string,
-    public readonly photo: Buffer|null = Buffer.alloc(1),
+    public readonly photo: string|null ='' 
   ) {}
 
   public static from(entity: Product) {

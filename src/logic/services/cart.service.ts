@@ -4,7 +4,6 @@ import {
   CartDto,
   CreateCartDto,
   GetCartDto,
-  GetSingleOrderDto,
   RemoveSingleOrderDto,
   UpdateSummaryDto,
 } from "../dtos/cart"
@@ -25,7 +24,7 @@ export class CartService {
     }
     return CartDto.from(cart)
   }
-
+  
   public async create(createCartDto: CreateCartDto) {
     const cart = await this._cartRepo.create(createCartDto)
 
@@ -89,7 +88,6 @@ export class CartService {
   ) {
     console.log(removeSingleOrderDto)
     const cart = await this._cartRepo.findById(removeSingleOrderDto.userId)
-    console.log("@@",removeSingleOrderDto.userId)
     if(!cart){
       throw new CouldNotFindException("Cart not found")
     }
@@ -110,7 +108,7 @@ export class CartService {
       id: removeSingleOrderDto.id,
       amount: singleOrder.amount,
       price: product.price,
-      summary:cart?.summary,
+      summary:cart.summary,
     })
     return this._cartRepo.removeSingleOrder(removeSingleOrderDto.singleOrderId)
   }

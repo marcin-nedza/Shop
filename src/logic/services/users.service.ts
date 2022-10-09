@@ -33,6 +33,10 @@ export class UserService {
   }
 
   public async create(createUserDto: CreateUserDto) {
+    const foundUser=await this._userRepo.findByEmail(createUserDto.email)
+    if(foundUser){
+      throw new GenericError('Email is taken')
+    }
     const hashedPassword = await this.hashPassword(createUserDto.password)
     const createdUser = await this._userRepo.create({
       ...createUserDto,

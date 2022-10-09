@@ -1,4 +1,5 @@
-import express, { NextFunction, Request, Response } from "express"
+import express, {  NextFunction, Request, Response } from "express"
+import cors from 'cors'
 import { Container } from "inversify"
 import { InversifyExpressServer } from "inversify-express-utils"
 import { DBContext } from "../../src/data/db.context"
@@ -11,6 +12,7 @@ import {
 import {
   Application,
   IAbstractApplicationOptions,
+  MorganMode,
 } from "./lib/abstract-application"
 import {
   UserRepository,
@@ -25,6 +27,7 @@ import {
 } from "../logic/exceptions"
 import { BaseHttpResponse } from "./lib/base-http-response"
 import { JwtUtils } from "../logic/utils/jwt-utils"
+import morgan from 'morgan'
 
 import "./controllers/users.controllers"
 import "./controllers/authentication.controller"
@@ -37,6 +40,9 @@ export class App extends Application {
       containerOpts: {
         defaultScope: "Singleton",
       },
+      morgan:{
+        mode:MorganMode.DEV
+      }
     })
   }
   public configureServices(container: Container): void {
@@ -54,7 +60,6 @@ export class App extends Application {
   public async setup(options: IAbstractApplicationOptions) {
     const _db = this.container.get(DBContext)
     await _db.connect()
-
     const server = new InversifyExpressServer(this.container)
 
     server.setErrorConfig((app) => {
@@ -89,6 +94,11 @@ export class App extends Application {
     })
     server.setConfig((app) => {
       app.use(express.json())
+      app.use(cors({
+        origin:"http://localhost:3000",
+        credentials:true
+      }))
+      app.use(morgan(options.morgan.mode))
     })
     const app = server.build()
 

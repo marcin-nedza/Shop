@@ -26,9 +26,11 @@ export class AuthenticationController {
 
     const response = BaseHttpResponse.success(token)
 
-    res.status(response.statusCode).cookie("accessToken", token, {
+    res.status(response.statusCode).cookie("Bearer ", token, {
       maxAge: 3.154e10,
-      httpOnly: true,
+      // httpOnly: true,
+      sameSite:'none',
+      secure:true
     })
   }
 }

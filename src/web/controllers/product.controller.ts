@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import multer from "multer"
 import { controller, httpDelete, httpGet, httpPatch, httpPost } from "inversify-express-utils"
 import { CreateProductDto, GetProductByCategoryDto, GetProductByNameDto, GetProductDto, UpdateProductDto } from "../../logic/dtos/products"
 import { ProductService } from "../../logic/services"
@@ -9,7 +10,7 @@ import {
   RequireUserMiddleware,
   ValidateRequestMiddleware,
 } from "../middleware"
-
+const upload = multer()
 @controller(
   "/product",
   DeserializeUserMiddleware.run(),
@@ -74,6 +75,7 @@ export class ProductController {
 
     res.status(response.statusCode).json(response);
   }
+
 
   @httpDelete('/:id',CheckRoleMiddleware.isAdmin,ValidateRequestMiddleware.withParams(GetProductDto))
   public async delete(req: Request, res: Response){

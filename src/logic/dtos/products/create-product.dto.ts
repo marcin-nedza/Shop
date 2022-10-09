@@ -8,7 +8,7 @@ export class CreateProductDto{
         public readonly plu:number,
         public readonly unit:Unit,
         public readonly category:string,
-        public readonly photo:Buffer =Buffer.alloc(1)
+        public readonly photo:string = ''
     ){}
 
     public static from(body:Partial<CreateProductDto>){

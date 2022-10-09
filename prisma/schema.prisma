@@ -30,7 +30,7 @@ model Product {
   plu         Int           @unique
   unit        Unit          @default(gram)
   category    String
-  photo       Bytes?
+  photo       String?
   singleOrder SingleOrder[]
 }
 
