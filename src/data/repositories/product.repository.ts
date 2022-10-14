@@ -8,15 +8,22 @@ export class ProductRepository {
   public constructor(private readonly _dbContext: DBContext) {}
 
   public async all() {
-    return this._dbContext.models.product.findMany()
+    return this._dbContext.models.product.findMany({
+      include:{
+        category:{
+          select:{
+            title:true
+          }
+        }
+        }})
   }
 
   public async create(entity: Omit<Product, "id">) {
-    return this._dbContext.models.product.create({ data: entity })
+    return this._dbContext.models.product.create({ data: entity,include:{category:true} })
   }
 
   public async findById(id: Product["id"]) {
-    return this._dbContext.models.product.findUnique({ where: { id } })
+    return this._dbContext.models.product.findUnique({ where: { id },include:{category:true} })
   }
 
   public async findByPlu(plu: Product["plu"]) {
@@ -30,18 +37,18 @@ export class ProductRepository {
           contains: searchName,
           mode: "insensitive",
         },
-      },
+      },include:{category:{select:{title:true}}}
     })
   }
 
   //simple pagination with fixed number of results
   public async findByCategory(payload: {
-    category: Product["category"]
+    category: Product["categoryId"]
     page: number
   }) {
     return this._dbContext.models.product.findMany({
       where: {
-        category: payload.category,
+        categoryId: payload.category,
       },
       take: 2,
       skip: (payload.page - 1) * 2,

@@ -16,21 +16,37 @@ export class AuthenticationController {
     private readonly _authenticationService: AuthenticationService
   ) {}
 
-  @httpGet("/", DeserializeUserMiddleware.run(), RequireUserMiddleware.run(),CheckRoleMiddleware.isAdmin)
+  @httpGet("/", DeserializeUserMiddleware.run(), RequireUserMiddleware.run(),CheckRoleMiddleware.isLoggedInRole)
   public async index(req: Request, res: Response) {
-    res.status(200).json("success")
+    res.status(200)
   }
   @httpPost("/", ValidateRequestMiddleware.with(SignInUserDto))
   public async create(req: Request, res: Response) {
-    const token = await this._authenticationService.signIn(req.body)
+    const {accessToken,user_id,role} = await this._authenticationService.signIn(req.body)
 
-    const response = BaseHttpResponse.success(token)
-
-    res.status(response.statusCode).cookie("Bearer ", token, {
-      maxAge: 3.154e10,
-      // httpOnly: true,
+    const response = BaseHttpResponse.success(accessToken)
+    res.status(response.statusCode).cookie("Bearer ", accessToken, {
+      // maxAge: 3.154e10,
+      maxAge:Number(process.env.MAX_AGE),
+      httpOnly: true,
       sameSite:'none',
       secure:true
+    })
+    console.log(req.body)
+    res.json({
+      ttl:new Date(Date.now() + Number(process.env.MAX_AGE)),
+      id:user_id,
+      role
+    })
+  }
+  
+  @httpPost('/logout')
+  public async logout(req: Request, res: Response){
+    const response = BaseHttpResponse.success({})
+
+    res.status(response.statusCode).cookie("Bearer ",'none',{
+      expires:new Date(Date.now() + 1000),
+      httpOnly:true
     })
   }
 }

@@ -9,6 +9,14 @@ export class CheckRoleMiddleware {
         }
         next()
     }
+    public static isLoggedInRole(req: Request, res: Response, next: NextFunction){
+        if(res.locals.user.user){
+            console.log(res.locals.user.user)
+            res.status(200).json('logged in')
+            // next()
+        }
+        next()
+    }
 
     
 

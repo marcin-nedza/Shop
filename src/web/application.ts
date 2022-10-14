@@ -8,6 +8,7 @@ import {
   AuthenticationService,
   CartService,
   ProductService,
+  CategoryService
 } from "../../src/logic/services"
 import {
   Application,
@@ -18,6 +19,7 @@ import {
   UserRepository,
   CartRepository,
   ProductRepository,
+  CategoryRepository
 } from "../data/repositories"
 import {
   ValidationException,
@@ -33,6 +35,7 @@ import "./controllers/users.controllers"
 import "./controllers/authentication.controller"
 import "./controllers/product.controller"
 import "./controllers/cart.controller"
+import "./controllers/category.controller"
 
 export class App extends Application {
   public constructor() {
@@ -54,6 +57,8 @@ export class App extends Application {
     container.bind(AuthenticationService).toSelf()
     container.bind(ProductService).toSelf()
     container.bind(CartService).toSelf()
+    container.bind(CategoryRepository).toSelf()
+    container.bind(CategoryService).toSelf()
     container.bind(JwtUtils).toSelf()
   }
 

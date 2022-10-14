@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import multer from "multer"
+// import multer from "multer"
 import { controller, httpDelete, httpGet, httpPatch, httpPost } from "inversify-express-utils"
 import { CreateProductDto, GetProductByCategoryDto, GetProductByNameDto, GetProductDto, UpdateProductDto } from "../../logic/dtos/products"
 import { ProductService } from "../../logic/services"
@@ -10,7 +10,7 @@ import {
   RequireUserMiddleware,
   ValidateRequestMiddleware,
 } from "../middleware"
-const upload = multer()
+// const upload = multer()
 @controller(
   "/product",
   DeserializeUserMiddleware.run(),

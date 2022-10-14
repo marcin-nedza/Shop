@@ -1,4 +1,4 @@
-import { Unit } from "@prisma/client";
+import { Category, Unit } from "@prisma/client";
 import { GenericError } from "../../exceptions";
 
 export class CreateProductDto{
@@ -7,7 +7,8 @@ export class CreateProductDto{
         public readonly price:number,
         public readonly plu:number,
         public readonly unit:Unit,
-        public readonly category:string,
+        public readonly categoryId:string,
+        public readonly category?:Category,
         public readonly photo:string = ''
     ){}
 
@@ -27,7 +28,7 @@ export class CreateProductDto{
         if(body.unit !=='gram' && body.unit !=='pcs'){
             throw new GenericError('Unit can be gram or pcs')
         }
-        if(!body.category){
+        if(!body.categoryId){
             throw new GenericError('Category is required')
         }
 
@@ -36,6 +37,7 @@ export class CreateProductDto{
             body.price,
             body.plu,
             body.unit,
+            body.categoryId,
             body.category,
             body.photo
         )

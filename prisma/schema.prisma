@@ -29,7 +29,8 @@ model Product {
   price       Float
   plu         Int           @unique
   unit        Unit          @default(gram)
-  category    String
+  categoryId String 
+  category    Category @relation(fields:[categoryId],references: [id])
   photo       String?
   singleOrder SingleOrder[]
 }
@@ -50,6 +51,12 @@ model Cart {
   userId       String        @unique
   user         User          @relation(fields: [userId], references: [id])
   summary      Float           @default(0)
+}
+
+model Category {
+  id String @id @default(uuid())
+  title String @unique
+  product Product []
 }
 
 enum Role {

@@ -12,12 +12,12 @@ export class AuthenticationService {
 
   public async signIn(signInUserDto: SignInUserDto) {
     const user = await this._userService.verifyPassword(signInUserDto)
-
+    
     const accessToken = this._jwtUtils.signJwt(
       { user },
       { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION }
     )
 
-    return accessToken
+    return {accessToken,user_id: user.id,role:user.role}
   }
 }
