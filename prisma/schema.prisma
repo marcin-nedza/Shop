@@ -30,7 +30,7 @@ model Product {
   plu         Int           @unique
   unit        Unit          @default(gram)
   categoryId String 
-  category    Category @relation(fields:[categoryId],references: [id])
+  category    Category @relation(fields:[categoryId],references: [id],onDelete: Cascade)
   photo       String?
   singleOrder SingleOrder[]
 }

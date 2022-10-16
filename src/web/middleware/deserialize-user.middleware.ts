@@ -11,7 +11,6 @@ export class DeserializeUserMiddleware extends BaseMiddleware {
   public async execute(req: Request, res: Response, next: NextFunction) {
     try {
       const accessToken = req.headers.cookie?.replace(/^Bearer\s?=/, "")
-      console.log({accessToken})
       if (!accessToken) {
         return res
           .status(401)
@@ -19,7 +18,6 @@ export class DeserializeUserMiddleware extends BaseMiddleware {
       }
 
       const { decoded, expired } = await JwtUtils.verifyJwt(accessToken)
-      console.log({decoded, expired})
       if (decoded) {
         res.locals.user = decoded
         return next()

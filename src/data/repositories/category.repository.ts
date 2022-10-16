@@ -18,8 +18,8 @@ export class CategoryRepository {
   }
 
   public async findOne(title: CategoryDto["title"]) {
-    return this._dbContext.models.category.findUnique({
-      where: { title},
+    return this._dbContext.models.category.findMany({
+      where: { title:{equals: title,mode:'insensitive'}},
     })
   }
 
@@ -38,6 +38,6 @@ export class CategoryRepository {
   }
 
   public async delete(id: CategoryDto["id"]) {
-    return this._dbContext.models.category.delete({ where: { id } })
+    return this._dbContext.models.category.delete({ where: { id }, })
   }
 }

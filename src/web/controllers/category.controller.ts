@@ -33,6 +33,16 @@ export class CategoryController {
     res.status(response.statusCode).json(response)
   }
 
+  @httpGet('/:id',ValidateRequestMiddleware.withParams(GetCategoryDto))
+  public async findById(req: Request, res: Response) {
+    console.log(req.body)
+    const category = await this._categoryService.findById(req.body)
+
+    const response = BaseHttpResponse.success(category)
+
+    res.status(response.statusCode).json(response)
+  }
+
   @httpPost("/", ValidateRequestMiddleware.with(CreateCategoryDto))
   public async create(req: Request, res: Response) {
     const category = await this._categoryService.create(req.body)
