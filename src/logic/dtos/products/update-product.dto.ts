@@ -7,7 +7,7 @@ export class UpdateProductDto{
         public price?: number,
         public plu?: number,
         public unit?:'gram'|'pcs',
-        public category? : string,
+        public categoryId? : string,
         public photo?:string
         
     ){}
@@ -17,6 +17,6 @@ export class UpdateProductDto{
             throw new CouldNotFindException('Missing id property');
         }
 
-        return new UpdateProductDto(body.id, body.name, body.price, body.plu, body.unit, body.category, body.photo);
+        return new UpdateProductDto(body.id, body.name, body.price, body.plu, body.unit, body.categoryId, body.photo);
     }
 }

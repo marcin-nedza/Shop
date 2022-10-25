@@ -19,6 +19,15 @@ import {
 export class ProductController {
   public constructor(private readonly _productService: ProductService) {}
 
+  //DEV ONLY
+  @httpPost('/bulk')
+  public async bulk(req: Request, res: Response){
+    const products = await this._productService.bulk()
+
+    const response = BaseHttpResponse.success(products)
+
+    res.status(response.statusCode).json(response)
+  }
   @httpGet("/")
   public async index(req: Request, res: Response) {
     const products = await this._productService.all()

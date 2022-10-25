@@ -17,6 +17,13 @@ import {
 @injectable()
 export class ProductService {
   public constructor(private readonly _productRepo: ProductRepository) {}
+  //DEV ONLY
+  public async bulk(){
+    const products = await this._productRepo.bulkCreate()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    return products
+  }
 
   public async all() {
     const products = await this._productRepo.all()
@@ -42,12 +49,17 @@ export class ProductService {
 
   public async findByName(getProductByNameDto: GetProductByNameDto) {
     const products = await this._productRepo.findByName(
-      getProductByNameDto.name
+      // getProductByNameDto.name
+      getProductByNameDto
     )
-    if (products.length === 0) {
+    if (products.products.length === 0) {
       throw new GenericError("No products found")
     }
-    return ProductDto.fromMany(products)
+    return{
+
+     products:ProductDto.fromMany(products.products),
+     count:products.count
+    }
   }
 
   public async findByCategory(
@@ -56,11 +68,14 @@ export class ProductService {
     const products = await this._productRepo.findByCategory(
       getProductByCategoryDto
     )
-    if (products.length === 0) {
+    if (products.products.length === 0) {
       throw new GenericError("No products found")
     }
 
-    return ProductDto.fromMany(products)
+    return{
+      products:ProductDto.fromMany(products.products),
+      count:products.count
+    } 
   }
   public async updateOne(updateProductDto: UpdateProductDto) {
     return this._productRepo.updateOne(updateProductDto)
