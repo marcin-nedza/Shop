@@ -1,7 +1,19 @@
 import { Request, Response } from "express"
 // import multer from "multer"
-import { controller, httpDelete, httpGet, httpPatch, httpPost } from "inversify-express-utils"
-import { CreateProductDto, GetProductByCategoryDto, GetProductByNameDto, GetProductDto, UpdateProductDto } from "../../logic/dtos/products"
+import {
+  controller,
+  httpDelete,
+  httpGet,
+  httpPatch,
+  httpPost,
+} from "inversify-express-utils"
+import {
+  CreateProductDto,
+  GetProductByCategoryDto,
+  GetProductByNameDto,
+  GetProductDto,
+  UpdateProductDto,
+} from "../../logic/dtos/products"
 import { ProductService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
@@ -11,17 +23,13 @@ import {
   ValidateRequestMiddleware,
 } from "../middleware"
 // const upload = multer()
-@controller(
-  "/product",
-  DeserializeUserMiddleware.run(),
-  RequireUserMiddleware.run()
-)
+@controller("/product")
 export class ProductController {
   public constructor(private readonly _productService: ProductService) {}
 
   //DEV ONLY
-  @httpPost('/bulk')
-  public async bulk(req: Request, res: Response){
+  @httpPost("/bulk")
+  public async bulk(req: Request, res: Response) {
     const products = await this._productService.bulk()
 
     const response = BaseHttpResponse.success(products)
@@ -46,17 +54,23 @@ export class ProductController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpGet('/name/search/:page',ValidateRequestMiddleware.withParamsAndQuery(GetProductByNameDto))
-  public async findByName(req: Request, res: Response){
+  @httpGet(
+    "/name/search/:page",
+    ValidateRequestMiddleware.withParamsAndQuery(GetProductByNameDto)
+  )
+  public async findByName(req: Request, res: Response) {
     const products = await this._productService.findByName(req.body)
 
     const response = BaseHttpResponse.success(products)
 
     res.status(response.statusCode).json(response)
   }
-  
-  @httpGet('/category/search/:page?',ValidateRequestMiddleware.withParamsAndQuery(GetProductByCategoryDto))
-  public async findByCategory(req: Request, res: Response){
+
+  @httpGet(
+    "/category/search/:page?",
+    ValidateRequestMiddleware.withParamsAndQuery(GetProductByCategoryDto)
+  )
+  public async findByCategory(req: Request, res: Response) {
     const products = await this._productService.findByCategory(req.body)
 
     const response = BaseHttpResponse.success(products)
@@ -65,8 +79,10 @@ export class ProductController {
   }
   @httpPost(
     "/",
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
     CheckRoleMiddleware.isAdmin,
-    ValidateRequestMiddleware.with(CreateProductDto)
+    ValidateRequestMiddleware.with(CreateProductDto),
   )
   public async create(req: Request, res: Response) {
     const product = await this._productService.create(req.body)
@@ -76,22 +92,33 @@ export class ProductController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpPatch('/:id',CheckRoleMiddleware.isAdmin,ValidateRequestMiddleware.withParams(UpdateProductDto))
+  @httpPatch(
+    "/:id",
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
+    CheckRoleMiddleware.isAdmin,
+    ValidateRequestMiddleware.withParams(UpdateProductDto),
+  )
   public async update(req: Request, res: Response) {
     await this._productService.updateOne(req.body)
 
-    const response = BaseHttpResponse.success({},200);
+    const response = BaseHttpResponse.success({}, 200)
 
-    res.status(response.statusCode).json(response);
+    res.status(response.statusCode).json(response)
   }
 
-
-  @httpDelete('/:id',CheckRoleMiddleware.isAdmin,ValidateRequestMiddleware.withParams(GetProductDto))
-  public async delete(req: Request, res: Response){
+  @httpDelete(
+    "/:id",
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
+    CheckRoleMiddleware.isAdmin,
+    ValidateRequestMiddleware.withParams(GetProductDto),
+  )
+  public async delete(req: Request, res: Response) {
     await this._productService.deleteOne(req.body)
 
-    const response = BaseHttpResponse.success({},200);
+    const response = BaseHttpResponse.success({}, 200)
 
-    res.status(response.statusCode).json(response);
+    res.status(response.statusCode).json(response)
   }
 }

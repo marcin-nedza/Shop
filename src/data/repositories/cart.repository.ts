@@ -15,10 +15,11 @@ export class CartRepository {
       include: {
         singleOrders: {
           // include: { product: true },
-          select:{id: true,amount: true,product: true}
+          select:{id: true,amount: true,product: true,cartId:true}
         },
       },
     })
+   
   }
 
   public async findSingleOrder(id: SingleOrder["id"]) {
@@ -38,6 +39,20 @@ export class CartRepository {
   public async createSingleOrder(entity: Omit<SingleOrder, "id">) {
     return this._dbContext.models.singleOrder.create({
       data: entity,
+    })
+  }
+
+  public async createMultipleOrder(entity:{
+    singleOrder:Omit<SingleOrder,'id'>
+    multiplier:number
+  }){
+    let data:any=[]
+
+    Array.from({length:entity.multiplier}).map(el=>data.push(entity.singleOrder))
+
+    return this._dbContext.models.singleOrder.createMany({
+      data:data,
+      
     })
   }
 
@@ -66,7 +81,6 @@ export class CartRepository {
     id: Cart["id"]
     summary: Cart["summary"]
   }) {
-    console.log("repo", id, summary)
     return this._dbContext.models.cart.update({
       where: { id },
       data: {

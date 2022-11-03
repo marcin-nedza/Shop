@@ -5,7 +5,7 @@ export class GetProductByNameDto {
 
   public static from(body: Partial<GetProductByNameDto>) {
     if (!body.name) {
-      throw new CouldNotFindException("Name cannot be empty")
+      throw new CouldNotFindException("Name cannot be empty88")
     }
 
     return new GetProductByNameDto(body.name, body.page)

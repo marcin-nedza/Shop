@@ -5,10 +5,14 @@ export abstract class BaseMiddleware {
     this.execute = this.execute.bind(this)
   }
 
-//   public abstract execute(
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-//   ): void | Promise<void>
-  public abstract execute(req:Request,res:Response,next:NextFunction):void |Promise<void | Response<unknown, Record<string, unknown>>>
+  //   public abstract execute(
+  //     req: Request,
+  //     res: Response,
+  //     next: NextFunction
+  //   ): void | Promise<void>
+  public abstract execute(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): void | Promise<void | Response<unknown, Record<string, unknown>>>
 }

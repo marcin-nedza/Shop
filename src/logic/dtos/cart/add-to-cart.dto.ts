@@ -5,7 +5,8 @@ export class AddToCartDto {
     public readonly userId: string,
     public readonly amount: number,
     public readonly productId: string,
-    public readonly description?:string
+    public readonly description?:string,
+    public readonly multiplier?:number
   ) {}
 
   public static from(body: AddToCartDto) {
@@ -19,6 +20,6 @@ export class AddToCartDto {
       throw new CouldNotFindException("Missing productId property")
     }
 
-    return new AddToCartDto(body.userId, body.amount, body.productId,body.description)
+    return new AddToCartDto(body.userId, body.amount, body.productId,body.description,body.multiplier)
   }
 }

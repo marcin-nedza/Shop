@@ -16,41 +16,43 @@ export class ProductRepository {
           plu: 1,
           price: 2.33,
           unit: "gram",
-          categoryId: "7109c724-26bc-417d-b7eb-3588ee5750fe",
+          categoryId: "cee312e0-e949-449b-befe-7011f6fc62b5",
         },
         {
           name: "prod2",
           plu: 2,
           price: 3.33,
           unit: "gram",
-          categoryId: "7109c724-26bc-417d-b7eb-3588ee5750fe",
+          categoryId: "cee312e0-e949-449b-befe-7011f6fc62b5",
         },
         {
           name: "prod3",
           plu: 3,
           price: 4.33,
           unit: "pcs",
-          categoryId: "78b0b5c9-dd73-4cf1-add7-27ffb103cf12",
+          categoryId: "aef17816-fcef-4368-85fd-eecb116e43ba",
         },
         {
           name: "prod4",
           plu: 4,
           price: 5.33,
           unit: "pcs",
-          categoryId: "78b0b5c9-dd73-4cf1-add7-27ffb103cf12",
+          categoryId: "aef17816-fcef-4368-85fd-eecb116e43ba",
         },
         {
           name: "prod5",
           plu: 5,
           price: 6.33,
           unit: "gram",
-          categoryId: "78b0b5c9-dd73-4cf1-add7-27ffb103cf12",
+          categoryId: "1fcbe4a3-7af7-4dd4-9ca3-c9d423528514",
         },
       ],
     })
   }
   public async all() {
-    return this._dbContext.models.product.findMany({
+    const count = await this._dbContext.models.product.count()
+
+    const products= await this._dbContext.models.product.findMany({
       include: {
         category: {
           select: {
@@ -59,6 +61,7 @@ export class ProductRepository {
         },
       },
     })
+    return {products,count}
   }
 
   public async create(entity: Omit<Product, "id">) {

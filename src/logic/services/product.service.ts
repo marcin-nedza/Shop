@@ -27,7 +27,10 @@ export class ProductService {
 
   public async all() {
     const products = await this._productRepo.all()
-    return ProductDto.fromMany(products)
+    return {
+     products: ProductDto.fromMany(products.products),
+     count:products.count
+    }
   }
 
   public async create(createProductDto: CreateProductDto) {

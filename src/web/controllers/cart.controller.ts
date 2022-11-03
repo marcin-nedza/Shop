@@ -58,9 +58,8 @@ export class CartController {
     ValidateRequestMiddleware.withParams(AddToCartDto)
   )
   public async addToCart(req: Request, res: Response) {
-    await this._cartService.addToCart(req.body)
-
-    const response = BaseHttpResponse.success({})
+    const cosik = await this._cartService.addToCart(req.body)
+    const response = BaseHttpResponse.success(cosik)
 
     res.status(response.statusCode).json(response)
   }

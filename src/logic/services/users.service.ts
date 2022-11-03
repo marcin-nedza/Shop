@@ -9,9 +9,10 @@ import {
   UpdateUserDto,
   UserDto,
 } from "../dtos/users"
+import { CartService } from "./cart.service"
 @injectable()
 export class UserService {
-  public constructor(private readonly _userRepo: UserRepository) {}
+  public constructor(private readonly _userRepo: UserRepository,private readonly _cartService:CartService) {}
 
   public async all() {
     const users = await this._userRepo.all()
@@ -42,6 +43,8 @@ export class UserService {
       ...createUserDto,
       password: hashedPassword,
     })
+
+    const cart=await this._cartService.create({userId:createdUser.id,summary:0})
 
     return UserDto.from(createdUser)
   }

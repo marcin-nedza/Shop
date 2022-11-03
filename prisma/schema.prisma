@@ -4,6 +4,7 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch"]
+  binaryTargets = ["debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -49,7 +50,8 @@ model Cart {
   id           String        @id @default(uuid())
   singleOrders SingleOrder[]
   userId       String        @unique
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id],onDelete: Cascade)
+  
   summary      Float           @default(0)
 }
 

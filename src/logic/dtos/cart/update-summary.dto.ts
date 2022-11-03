@@ -1,3 +1,4 @@
+import { Unit } from "@prisma/client"
 import { CouldNotFindException } from "../../exceptions"
 
 export class UpdateSummaryDto {
@@ -5,7 +6,8 @@ export class UpdateSummaryDto {
     public readonly id: string,
     public readonly price: number,
     public readonly amount: number,
-    public readonly summary:number
+    public readonly summary:number,
+    public readonly unit:Unit
   ) {}
 
   public static from(body: UpdateSummaryDto) {
@@ -21,7 +23,9 @@ export class UpdateSummaryDto {
     if(!body.summary) {
       throw new CouldNotFindException("Missing summary property")
       }
-
-    return new UpdateSummaryDto(body.id, body.price, body.amount,body.summary)
+    if(!body.unit ){
+      throw new CouldNotFindException("Missing unit property")
+    }
+    return new UpdateSummaryDto(body.id, body.price, body.amount,body.summary,body.unit)
   }
 }
