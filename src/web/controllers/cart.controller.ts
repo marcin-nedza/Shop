@@ -67,7 +67,7 @@ export class CartController {
 
 
   @httpDelete(
-    "/:id/:singleOrderId/removeOne",
+    "/removeOne/:id/:singleOrderId",
     AttachUserId.attach,
     ValidateRequestMiddleware.withParams(RemoveSingleOrderDto)
   )

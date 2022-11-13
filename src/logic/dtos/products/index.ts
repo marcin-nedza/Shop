@@ -4,6 +4,7 @@ import { ProductDto } from "./product.dto";
 import { UpdateProductDto } from "./update-product.dto";
 import { GetProductByNameDto } from "./get-product-by-name.dto";
 import { GetProductByCategoryDto } from "./get-product-by-category.dto";
+import {  GetByQueryDto} from "./get-by-query.dto";
 export {
     CreateProductDto,
     GetProductDto,
@@ -11,4 +12,5 @@ export {
     UpdateProductDto,
     GetProductByNameDto,
     GetProductByCategoryDto,
+    GetByQueryDto
 }

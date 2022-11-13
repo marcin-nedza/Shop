@@ -32,7 +32,6 @@ export class AuthenticationController {
       sameSite:'none',
       secure:true
     })
-    console.log(req.body)
     res.json({
       ttl:new Date(Date.now() + Number(process.env.MAX_AGE)),
       id:user_id,
@@ -45,7 +44,7 @@ export class AuthenticationController {
     const response = BaseHttpResponse.success({})
 
     res.status(response.statusCode).cookie("Bearer ",'none',{
-      expires:new Date(Date.now() + 1000),
+      expires:new Date(Date.now() + 10),
       httpOnly:true
     })
   }

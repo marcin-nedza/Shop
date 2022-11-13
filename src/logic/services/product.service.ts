@@ -2,6 +2,7 @@ import { injectable } from "inversify"
 import { ProductRepository } from "../../data/repositories"
 import {
   CreateProductDto,
+  GetByQueryDto,
   GetProductByCategoryDto,
   GetProductByNameDto,
   GetProductDto,
@@ -17,16 +18,12 @@ import {
 @injectable()
 export class ProductService {
   public constructor(private readonly _productRepo: ProductRepository) {}
-  //DEV ONLY
-  public async bulk(){
-    const products = await this._productRepo.bulkCreate()
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    return products
-  }
 
-  public async all() {
-    const products = await this._productRepo.all()
+  public async all(getByQueryQueryDto:GetByQueryDto) {
+    const products = await this._productRepo.all({categoryId:getByQueryQueryDto.categoryId})
+    if(!products.products){
+      throw new CouldNotFindException("No products found")
+    }
     return {
      products: ProductDto.fromMany(products.products),
      count:products.count

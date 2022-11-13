@@ -9,7 +9,7 @@ export class RemoveSingleOrderDto {
 
   public static from(body: RemoveSingleOrderDto) {
     if (!body.id) {
-      throw new CouldNotFindException("Missing id property")
+      throw new CouldNotFindException("Missing cart id property")
     }
     if (!body.singleOrderId) {
       throw new CouldNotFindException("Missing singleOrderId property")

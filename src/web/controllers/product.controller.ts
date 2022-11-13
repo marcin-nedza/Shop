@@ -9,6 +9,7 @@ import {
 } from "inversify-express-utils"
 import {
   CreateProductDto,
+  GetByQueryDto,
   GetProductByCategoryDto,
   GetProductByNameDto,
   GetProductDto,
@@ -27,18 +28,9 @@ import {
 export class ProductController {
   public constructor(private readonly _productService: ProductService) {}
 
-  //DEV ONLY
-  @httpPost("/bulk")
-  public async bulk(req: Request, res: Response) {
-    const products = await this._productService.bulk()
-
-    const response = BaseHttpResponse.success(products)
-
-    res.status(response.statusCode).json(response)
-  }
-  @httpGet("/")
+  @httpGet("/",ValidateRequestMiddleware.withParamsAndQuery(GetByQueryDto))
   public async index(req: Request, res: Response) {
-    const products = await this._productService.all()
+    const products = await this._productService.all(req.body)
 
     const response = BaseHttpResponse.success(products)
 
@@ -60,7 +52,7 @@ export class ProductController {
   )
   public async findByName(req: Request, res: Response) {
     const products = await this._productService.findByName(req.body)
-
+console.log('asd',req.body)
     const response = BaseHttpResponse.success(products)
 
     res.status(response.statusCode).json(response)

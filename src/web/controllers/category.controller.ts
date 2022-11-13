@@ -13,14 +13,14 @@ import {
 } from "../../logic/dtos/category"
 import { CategoryService } from "../../logic/services/category.service"
 import { BaseHttpResponse } from "../lib/base-http-response"
-import { CheckRoleMiddleware, DeserializeUserMiddleware, RequireUserMiddleware, ValidateRequestMiddleware } from "../middleware"
+import {
+  CheckRoleMiddleware,
+  DeserializeUserMiddleware,
+  RequireUserMiddleware,
+  ValidateRequestMiddleware,
+} from "../middleware"
 
-@controller(
-  "/category",
-  DeserializeUserMiddleware.run(),
-  RequireUserMiddleware.run(),
-  CheckRoleMiddleware.isAdmin
-)
+@controller("/category")
 export class CategoryController {
   public constructor(private readonly _categoryService: CategoryService) {}
 
@@ -33,7 +33,7 @@ export class CategoryController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpGet('/:id',ValidateRequestMiddleware.withParams(GetCategoryDto))
+  @httpGet("/:id", ValidateRequestMiddleware.withParams(GetCategoryDto))
   public async findById(req: Request, res: Response) {
     console.log(req.body)
     const category = await this._categoryService.findById(req.body)
@@ -43,7 +43,14 @@ export class CategoryController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpPost("/", ValidateRequestMiddleware.with(CreateCategoryDto))
+  @httpPost(
+    "/",
+    ValidateRequestMiddleware.with(CreateCategoryDto),
+
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
+    CheckRoleMiddleware.isAdmin
+  )
   public async create(req: Request, res: Response) {
     const category = await this._categoryService.create(req.body)
 
@@ -52,7 +59,13 @@ export class CategoryController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpPatch("/:id", ValidateRequestMiddleware.withParams(UpdateCategoryDto))
+  @httpPatch(
+    "/:id",
+    ValidateRequestMiddleware.withParams(UpdateCategoryDto),
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
+    CheckRoleMiddleware.isAdmin
+  )
   public async update(req: Request, res: Response) {
     await this._categoryService.update(req.body)
 
@@ -61,7 +74,13 @@ export class CategoryController {
     res.status(response.statusCode).json(response)
   }
 
-  @httpDelete("/:id", ValidateRequestMiddleware.withParams(GetCategoryDto))
+  @httpDelete(
+    "/:id",
+    ValidateRequestMiddleware.withParams(GetCategoryDto),
+    DeserializeUserMiddleware.run(),
+    RequireUserMiddleware.run(),
+    CheckRoleMiddleware.isAdmin
+  )
   public async delete(req: Request, res: Response) {
     await this._categoryService.delete(req.body)
 

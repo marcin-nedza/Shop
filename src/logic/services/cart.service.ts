@@ -86,11 +86,6 @@ export class CartService {
     if (!updatedCart) {
       throw new CouldNotFindException("Updated Cart not found")
     }
-    //? i think connectSingleOrderToCart is redundant!
-    // const updatedCart = await this._cartRepo.connectSingleOrderToCart({
-    //   cartId: cart.id,
-    //   singleOrderId: singleOrder.id,
-    // })
     return CartDto.from(updatedCart)
   }
 
@@ -108,7 +103,16 @@ export class CartService {
   public async substractFromSummary(updateSummaryDto: UpdateSummaryDto) {
     const valueToRemove =
       updateSummaryDto.summary -
-      updateSummaryDto.amount * updateSummaryDto.price
+      (updateSummaryDto.amount * updateSummaryDto.price) /
+        (updateSummaryDto.unit === Unit.gram ? 1000 : 1)
+        console.log(Math.round((valueToRemove + Number.EPSILON) * 100) / 100
+)
+     if(valueToRemove<0){
+      return this._cartRepo.updateSummary({
+      id: updateSummaryDto.id,
+      summary:0 
+      })
+     }
     return this._cartRepo.updateSummary({
       id: updateSummaryDto.id,
       summary: Math.round((valueToRemove + Number.EPSILON) * 100) / 100,
