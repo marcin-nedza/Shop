@@ -23,12 +23,12 @@ import {
   RequireUserMiddleware,
   ValidateRequestMiddleware,
 } from "../middleware"
-// const upload = multer()
+
 @controller("/product")
 export class ProductController {
   public constructor(private readonly _productService: ProductService) {}
 
-  @httpGet("/",ValidateRequestMiddleware.withParamsAndQuery(GetByQueryDto))
+  @httpGet("/", ValidateRequestMiddleware.withParamsAndQuery(GetByQueryDto))
   public async index(req: Request, res: Response) {
     const products = await this._productService.all(req.body)
 
@@ -52,7 +52,7 @@ export class ProductController {
   )
   public async findByName(req: Request, res: Response) {
     const products = await this._productService.findByName(req.body)
-console.log('asd',req.body)
+    console.log("asd", req.body)
     const response = BaseHttpResponse.success(products)
 
     res.status(response.statusCode).json(response)
@@ -69,12 +69,22 @@ console.log('asd',req.body)
 
     res.status(response.statusCode).json(response)
   }
+
+  @httpPost("/suggested", ValidateRequestMiddleware.with(GetProductByCategoryDto))
+  public async findSuggested(req: Request, res: Response) {
+    const products = await this._productService.findSuggested(req.body)
+
+    const response = BaseHttpResponse.success(products)
+
+    res.status(response.statusCode).json(response)
+  }
+
   @httpPost(
     "/",
     DeserializeUserMiddleware.run(),
     RequireUserMiddleware.run(),
     CheckRoleMiddleware.isAdmin,
-    ValidateRequestMiddleware.with(CreateProductDto),
+    ValidateRequestMiddleware.with(CreateProductDto)
   )
   public async create(req: Request, res: Response) {
     const product = await this._productService.create(req.body)
@@ -89,7 +99,7 @@ console.log('asd',req.body)
     DeserializeUserMiddleware.run(),
     RequireUserMiddleware.run(),
     CheckRoleMiddleware.isAdmin,
-    ValidateRequestMiddleware.withParams(UpdateProductDto),
+    ValidateRequestMiddleware.withParams(UpdateProductDto)
   )
   public async update(req: Request, res: Response) {
     await this._productService.updateOne(req.body)
@@ -104,7 +114,7 @@ console.log('asd',req.body)
     DeserializeUserMiddleware.run(),
     RequireUserMiddleware.run(),
     CheckRoleMiddleware.isAdmin,
-    ValidateRequestMiddleware.withParams(GetProductDto),
+    ValidateRequestMiddleware.withParams(GetProductDto)
   )
   public async delete(req: Request, res: Response) {
     await this._productService.deleteOne(req.body)

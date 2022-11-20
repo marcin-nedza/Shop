@@ -18,6 +18,6 @@ export class AuthenticationService {
       { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRATION }
     )
 
-    return {accessToken,user_id: user.id,role:user.role}
+    return {accessToken,user_id: user.id,role:user.role,username:user.username}
   }
 }

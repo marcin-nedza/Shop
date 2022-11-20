@@ -19,14 +19,16 @@ import {
 export class ProductService {
   public constructor(private readonly _productRepo: ProductRepository) {}
 
-  public async all(getByQueryQueryDto:GetByQueryDto) {
-    const products = await this._productRepo.all({categoryId:getByQueryQueryDto.categoryId})
-    if(!products.products){
+  public async all(getByQueryQueryDto: GetByQueryDto) {
+    const products = await this._productRepo.all({
+      categoryId: getByQueryQueryDto.categoryId,
+    })
+    if (!products.products) {
       throw new CouldNotFindException("No products found")
     }
     return {
-     products: ProductDto.fromMany(products.products),
-     count:products.count
+      products: ProductDto.fromMany(products.products),
+      count: products.count,
     }
   }
 
@@ -55,10 +57,9 @@ export class ProductService {
     if (products.products.length === 0) {
       throw new GenericError("No products found")
     }
-    return{
-
-     products:ProductDto.fromMany(products.products),
-     count:products.count
+    return {
+      products: ProductDto.fromMany(products.products),
+      count: products.count,
     }
   }
 
@@ -72,11 +73,22 @@ export class ProductService {
       throw new GenericError("No products found")
     }
 
-    return{
-      products:ProductDto.fromMany(products.products),
-      count:products.count
-    } 
+    return {
+      products: ProductDto.fromMany(products.products),
+      count: products.count,
+    }
   }
+
+  public async findSuggested(getSuggestedProducts: GetProductByCategoryDto) {
+    const products = await this._productRepo.findSuggested({
+      category: getSuggestedProducts.category,
+    })
+        if(products.length===0){
+            throw new GenericError("No products found")
+        }
+        return products
+  }
+
   public async updateOne(updateProductDto: UpdateProductDto) {
     return this._productRepo.updateOne(updateProductDto)
   }
