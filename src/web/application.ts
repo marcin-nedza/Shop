@@ -100,7 +100,7 @@ export class App extends Application {
     server.setConfig((app) => {
       app.use(express.json())
       app.use(cors({
-        origin:"http://localhost:3000",
+        origin:"https://loquacious-pegasus-3bb988.netlify.app/",
         credentials:true
       }))
       app.use(morgan(options.morgan.mode))
