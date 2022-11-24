@@ -6,6 +6,8 @@ export class SignInUserDto {
     public readonly password: string,
   ) {}
   public static from(body: Partial<SignInUserDto>) {
+        console.log('dto',body.email,body.password);
+        
     if (!body.email) {
       throw new ValidationException("missing email property")
     }

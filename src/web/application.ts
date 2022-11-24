@@ -92,7 +92,7 @@ export class App extends Application {
 
         if(err instanceof Error){
           const response = BaseHttpResponse.failed(err.message, 500)
-        console.log(response);
+        console.log('errHandler',response);
                
           return res.status(response.statusCode).json(response)
         }
