@@ -65,8 +65,12 @@ export class UserService {
   }
 
   public async verifyPassword(payload: SignInUserDto) {
+        console.log('service start',payload);
+        
     const user = await this._userRepo.findByEmail(payload.email)
     if (!user) {
+            console.log('throw error');
+            
       throw new CouldNotFindUserException()
     }
 
