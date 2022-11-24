@@ -7,6 +7,7 @@ declare global {
       JWT_ACCESS_TOKEN_EXPIRATION: string;
       MAX_AGE: number;
       DATABASE_URL: string;
+      HOST_URL: string;
       CLOUDINARY_NAME: string;
       CLOUDINARY_API_KEY: string;
       CLOUDINARY_API_SECRET: string;
