@@ -36,7 +36,6 @@ export class CategoryService{
     }
 
     public async update(updateCategoryDto:UpdateCategoryDto){
-        console.log('aASASD',updateCategoryDto)
         const foundCategory = await this._categoryRepo.findById(updateCategoryDto.id)
         const createdCategory = await this._categoryRepo.findOne(updateCategoryDto.newTitle)
         if(!foundCategory){

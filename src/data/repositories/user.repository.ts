@@ -17,8 +17,6 @@ export class UserRepository {
   }
 
   public async findByEmail(email: string) {
-        console.log('user repo',email);
-        
     return this._dbContext.models.user.findUnique({
       where: { email },
     })

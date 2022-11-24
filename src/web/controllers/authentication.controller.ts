@@ -22,13 +22,9 @@ export class AuthenticationController {
   }
   @httpPost("/", ValidateRequestMiddleware.with(SignInUserDto))
   public async create(req: Request, res: Response) {
-        console.log('controller start',req.body);
-        
     const {accessToken,user_id,role,username} = await this._authenticationService.signIn(req.body)
-    console.log('controler 2',accessToken,user_id,role)
     
     const response = BaseHttpResponse.success(accessToken)
-    console.log('controller 3');
     
     res.status(response.statusCode).cookie("Bearer ", accessToken, {
       // maxAge: 3.154e10,

@@ -35,7 +35,6 @@ export class CategoryController {
 
   @httpGet("/:id", ValidateRequestMiddleware.withParams(GetCategoryDto))
   public async findById(req: Request, res: Response) {
-    console.log(req.body)
     const category = await this._categoryService.findById(req.body)
 
     const response = BaseHttpResponse.success(category)
