@@ -100,7 +100,7 @@ export class App extends Application {
     server.setConfig((app) => {
       app.use(express.json())
       app.use(cors({
-        origin:["http://localhost:3000","http://192.168.0.206:3000"],
+        origin:"http://localhost:3000",
         credentials:true
       }))
       app.use(morgan(options.morgan.mode))
@@ -108,7 +108,7 @@ export class App extends Application {
     const app = server.build()
 
     app.listen(process.env.PORT, () => {
-      console.log(`Server is listening on http://localhost:${process.env.PORT}`)
+      console.log(`Server is listening on ${process.env.PORT}`)
     })
   }
 }

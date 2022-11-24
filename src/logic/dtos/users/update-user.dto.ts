@@ -5,12 +5,14 @@ export class UpdateUserDto {
     public readonly id: string,
     public readonly email?: string,
     public readonly username?: string,
-    public readonly role?: "USER" | "ADMIN"
+    public readonly role?: "USER" | "ADMIN",
+    public readonly password?:string
+    
   ) {}
   public static from(body:Partial<UpdateUserDto>){
     if(!body.id){
         throw new GenericError("Missing user id");
     }
-    return new UpdateUserDto(body.id, body.email, body.username, body.role)
+    return new UpdateUserDto(body.id, body.email, body.username, body.role,body.password)
   }
 }

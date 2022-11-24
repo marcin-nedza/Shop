@@ -33,7 +33,7 @@ export class CartController {
   @httpGet("/", AttachUserId.attach, ValidateRequestMiddleware.with(GetCartDto))
   public async findById(req: Request, res: Response) {
     const cart = await this._cartService.findById(req.body)
-
+            
     const response = BaseHttpResponse.success(cart)
 
     res.status(response.statusCode).json(response)

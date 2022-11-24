@@ -43,7 +43,9 @@ export class UserRepository {
       },
     })
   }
-
+    public async resetPassword(password:User['password']){
+         
+    }
   public async deleteOne(id: User["id"]) {
     return this._dbContext.models.user.delete({
       where: { id },

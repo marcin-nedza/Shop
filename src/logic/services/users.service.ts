@@ -55,6 +55,7 @@ export class UserService {
       email: updateUserDto.email,
       username: updateUserDto.username,
       role: updateUserDto.role,
+    
     })
   }
 
