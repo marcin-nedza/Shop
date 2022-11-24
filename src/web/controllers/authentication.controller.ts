@@ -34,13 +34,19 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite:'none',
       secure:true
-    })
-    res.json({
+    }).json({
+
       ttl:new Date(Date.now() + Number(process.env.MAX_AGE)),
       id:user_id,
       role,
       username
-    })
+            })
+    // res.json({
+    //   ttl:new Date(Date.now() + Number(process.env.MAX_AGE)),
+    //   id:user_id,
+    //   role,
+    //   username
+    // })
   }
   
   @httpPost('/logout')
