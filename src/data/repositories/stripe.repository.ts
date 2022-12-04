@@ -34,8 +34,8 @@ export class StripeRepository {
           quantity: 1,
         }
       }),
-      cancel_url: process.env.HOST_URL ?? "http://localhost:3000/reject",
-      success_url: process.env.HOST_URL ?? "http://localhost:3000/success",
+      cancel_url: `${process.env.HOST_URL}/cancel` ?? "http://localhost:3000/reject",
+      success_url: `${process.env.HOST_URL}/success` ?? "http://localhost:3000/success",
     })
     return session
   }
