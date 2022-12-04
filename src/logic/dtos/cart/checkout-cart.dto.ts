@@ -1,15 +1,17 @@
 import { CouldNotFindException } from "../../exceptions"
 
-export class GetCartDto {
+export class CheckoutCartDto {
   public constructor(
     public readonly userId: string,
-    public readonly summary?: number
   ) {}
 
-  public static from(body: Partial<GetCartDto>) {
+  public static from(body: Partial<CheckoutCartDto>) {
+        console.log('WE ARE HERE');
+        
     if (!body.userId) {
+        console.log('WE ARE HERE2');
       throw new CouldNotFindException("Missing userId property")
     }
-    return new GetCartDto(body.userId, body.summary)
+    return new CheckoutCartDto(body.userId)
   }
 }

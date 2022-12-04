@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express"
+import { NextFunction, Request, Response } from "express"
 import { CouldNotFindException } from "../../logic/exceptions"
 import { JwtUtils } from "../../logic/utils/jwt-utils"
 import { BaseMiddleware } from "../lib/base-middleware"
@@ -14,7 +14,11 @@ export class DeserializeUserMiddleware extends BaseMiddleware {
       if (!accessToken) {
         return res
           .status(401)
-          .json({ data: {}, error: "Access token is required", statusCode: 401 })
+          .json({
+            data: {},
+            error: "Access token is required",
+            statusCode: 401,
+          })
       }
 
       const { decoded, expired } = await JwtUtils.verifyJwt(accessToken)
@@ -25,7 +29,7 @@ export class DeserializeUserMiddleware extends BaseMiddleware {
       if (expired) {
         return next()
       }
-      
+
       return next()
     } catch (error) {
       throw new CouldNotFindException("aaaaa")

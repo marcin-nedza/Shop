@@ -1,18 +1,18 @@
 import { injectable } from "inversify"
 import { ProductRepository } from "../../data/repositories"
 import {
-  CreateProductDto,
-  GetByQueryDto,
-  GetProductByCategoryDto,
-  GetProductByNameDto,
-  GetProductDto,
-  ProductDto,
-  UpdateProductDto,
+    CreateProductDto,
+    GetByQueryDto,
+    GetProductByCategoryDto,
+    GetProductByNameDto,
+    GetProductDto,
+    ProductDto,
+    UpdateProductDto
 } from "../dtos/products"
 import {
-  CouldNotFindException,
-  GenericError,
-  ValidationException,
+    CouldNotFindException,
+    GenericError,
+    ValidationException
 } from "../exceptions"
 
 @injectable()
@@ -51,7 +51,6 @@ export class ProductService {
 
   public async findByName(getProductByNameDto: GetProductByNameDto) {
     const products = await this._productRepo.findByName(
-      // getProductByNameDto.name
       getProductByNameDto
     )
     if (products.products.length === 0) {

@@ -1,6 +1,6 @@
+import { User } from "@prisma/client"
 import { injectable } from "inversify"
 import { DBContext } from "../db.context"
-import { User } from "@prisma/client"
 
 @injectable()
 export class UserRepository {
@@ -43,14 +43,11 @@ export class UserRepository {
       },
     })
   }
-    public async resetPassword(password:User['password']){
-         
-    }
+
   public async deleteOne(id: User["id"]) {
     return this._dbContext.models.user.delete({
       where: { id },
     })
   }
 
-  // public async verifyPassword(password:string)
 }

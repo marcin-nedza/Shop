@@ -1,23 +1,23 @@
 import { Request, Response } from "express"
 import {
-  controller,
-  httpDelete,
-  httpGet,
-  httpPatch,
-  httpPost,
+    controller,
+    httpDelete,
+    httpGet,
+    httpPatch,
+    httpPost
 } from "inversify-express-utils"
 import {
-  CreateCategoryDto,
-  GetCategoryDto,
-  UpdateCategoryDto,
+    CreateCategoryDto,
+    GetCategoryDto,
+    UpdateCategoryDto
 } from "../../logic/dtos/category"
 import { CategoryService } from "../../logic/services/category.service"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
-  CheckRoleMiddleware,
-  DeserializeUserMiddleware,
-  RequireUserMiddleware,
-  ValidateRequestMiddleware,
+    CheckRoleMiddleware,
+    DeserializeUserMiddleware,
+    RequireUserMiddleware,
+    ValidateRequestMiddleware
 } from "../middleware"
 
 @controller("/category")

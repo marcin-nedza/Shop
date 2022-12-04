@@ -1,10 +1,10 @@
 import { Request, Response } from "express"
 import {
-  controller,
-  httpDelete,
-  httpGet,
-  httpPatch,
-  httpPost,
+    controller,
+    httpDelete,
+    httpGet,
+    httpPatch,
+    httpPost
 } from "inversify-express-utils"
 import { CreateUserDto } from "../../logic/dtos/users/create-user.dto"
 import { GetOneUserDto } from "../../logic/dtos/users/get-one-user.dto"

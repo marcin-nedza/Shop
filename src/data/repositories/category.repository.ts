@@ -1,7 +1,7 @@
-import { injectable } from "inversify"
 import { Category } from "@prisma/client"
-import { DBContext } from "../db.context"
+import { injectable } from "inversify"
 import { CategoryDto } from "src/logic/dtos/category/category.dto"
+import { DBContext } from "../db.context"
 
 @injectable()
 export class CategoryRepository {

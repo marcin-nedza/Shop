@@ -2,13 +2,12 @@ import { Unit } from "@prisma/client"
 import { injectable } from "inversify"
 import { CartRepository, ProductRepository } from "../../data/repositories"
 import {
-  CartDto,
-  CreateCartDto,
-  GetCartDto,
-  RemoveSingleOrderDto,
-  UpdateSummaryDto,
+    AddToCartDto, CartDto,
+    CreateCartDto,
+    GetCartDto,
+    RemoveSingleOrderDto,
+    UpdateSummaryDto
 } from "../dtos/cart"
-import { AddToCartDto } from "../dtos/cart"
 import { CouldNotFindException } from "../exceptions"
 
 @injectable()
@@ -40,7 +39,7 @@ export class CartService {
 
     //Adding multiple products to cart
     if (addToCartDto.multiplier) {
-      const multipleOrder = await this._cartRepo.createMultipleOrder({
+       await this._cartRepo.createMultipleOrder({
         multiplier: addToCartDto.multiplier,
         singleOrder: {
           cartId: cart.id,
@@ -122,7 +121,6 @@ export class CartService {
   public async removeSingleOrderFromCart(
     removeSingleOrderDto: RemoveSingleOrderDto
   ) {
-    console.log(removeSingleOrderDto)
     const cart = await this._cartRepo.findById(removeSingleOrderDto.userId)
     if (!cart) {
       throw new CouldNotFindException("Cart not found")

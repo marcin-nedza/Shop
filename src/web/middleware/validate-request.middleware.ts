@@ -40,6 +40,7 @@ export class ValidateRequestMiddleware extends BaseMiddleware {
   public static withParams(dto: any) {
     return new ValidateRequestMiddleware(dto, true).execute
   }
+
   public static withParamsAndQuery(dto: any) {
     return new ValidateRequestMiddleware(dto,false, true).execute
     }

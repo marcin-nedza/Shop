@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { User } from "@prisma/client"
 import { injectable } from "inversify"
 import jwt from "jsonwebtoken"
-import { User } from "@prisma/client"
 
 export interface IToken {
   expired: boolean

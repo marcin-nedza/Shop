@@ -1,9 +1,9 @@
 import { injectable } from "inversify";
 import { CategoryRepository } from "../../data/repositories";
+import { CreateCategoryDto, GetCategoryDto } from "../dtos/category";
 import { CategoryDto } from "../dtos/category/category.dto";
-import { CreateCategoryDto,GetCategoryDto } from "../dtos/category";
-import { CouldNotFindException, GenericError, ValidationException } from "../exceptions";
 import { UpdateCategoryDto } from "../dtos/category/update-category.dto";
+import { CouldNotFindException, GenericError, ValidationException } from "../exceptions";
 
 
 @injectable()

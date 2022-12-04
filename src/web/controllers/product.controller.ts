@@ -1,27 +1,26 @@
 import { Request, Response } from "express"
-// import multer from "multer"
 import {
-  controller,
-  httpDelete,
-  httpGet,
-  httpPatch,
-  httpPost,
+    controller,
+    httpDelete,
+    httpGet,
+    httpPatch,
+    httpPost
 } from "inversify-express-utils"
 import {
-  CreateProductDto,
-  GetByQueryDto,
-  GetProductByCategoryDto,
-  GetProductByNameDto,
-  GetProductDto,
-  UpdateProductDto,
+    CreateProductDto,
+    GetByQueryDto,
+    GetProductByCategoryDto,
+    GetProductByNameDto,
+    GetProductDto,
+    UpdateProductDto
 } from "../../logic/dtos/products"
 import { ProductService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
-  CheckRoleMiddleware,
-  DeserializeUserMiddleware,
-  RequireUserMiddleware,
-  ValidateRequestMiddleware,
+    CheckRoleMiddleware,
+    DeserializeUserMiddleware,
+    RequireUserMiddleware,
+    ValidateRequestMiddleware
 } from "../middleware"
 
 @controller("/product")
@@ -52,7 +51,7 @@ export class ProductController {
   )
   public async findByName(req: Request, res: Response) {
     const products = await this._productService.findByName(req.body)
-    console.log("asd", req.body)
+
     const response = BaseHttpResponse.success(products)
 
     res.status(response.statusCode).json(response)

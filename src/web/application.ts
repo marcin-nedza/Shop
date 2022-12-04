@@ -1,41 +1,35 @@
-import express, {  NextFunction, Request, Response } from "express"
-import cors from 'cors'
+import cors from "cors"
+import express, { NextFunction, Request, Response } from "express"
 import { Container } from "inversify"
 import { InversifyExpressServer } from "inversify-express-utils"
+import morgan from "morgan"
 import { DBContext } from "../../src/data/db.context"
+import { StripeRepository } from "../../src/data/repositories"
 import {
-  UserService,
-  AuthenticationService,
-  CartService,
-  ProductService,
-  CategoryService
+    AuthenticationService,
+    CartService, CategoryService, ProductService, StripeService, UserService
 } from "../../src/logic/services"
 import {
-  Application,
-  IAbstractApplicationOptions,
-  MorganMode,
-} from "./lib/abstract-application"
-import {
-  UserRepository,
-  CartRepository,
-  ProductRepository,
-  CategoryRepository
+    CartRepository, CategoryRepository, ProductRepository, UserRepository
 } from "../data/repositories"
 import {
-  ValidationException,
-  CouldNotFindException,
-  CouldNotFindUserException,
-  GenericError,
+    CouldNotFindException,
+    CouldNotFindUserException,
+    GenericError, ValidationException
 } from "../logic/exceptions"
-import { BaseHttpResponse } from "./lib/base-http-response"
 import { JwtUtils } from "../logic/utils/jwt-utils"
-import morgan from 'morgan'
-
-import "./controllers/users.controllers"
 import "./controllers/authentication.controller"
-import "./controllers/product.controller"
 import "./controllers/cart.controller"
 import "./controllers/category.controller"
+import "./controllers/product.controller"
+import "./controllers/users.controllers"
+import {
+    Application,
+    IAbstractApplicationOptions,
+    MorganMode
+} from "./lib/abstract-application"
+import { BaseHttpResponse } from "./lib/base-http-response"
+
 
 export class App extends Application {
   public constructor() {
@@ -43,13 +37,14 @@ export class App extends Application {
       containerOpts: {
         defaultScope: "Singleton",
       },
-      morgan:{
-        mode:MorganMode.DEV
-      }
+      morgan: {
+        mode: MorganMode.DEV,
+      },
     })
   }
   public configureServices(container: Container): void {
     container.bind(DBContext).toSelf()
+    container.bind(StripeRepository).toSelf()
     container.bind(UserRepository).toSelf()
     container.bind(ProductRepository).toSelf()
     container.bind(CartRepository).toSelf()
@@ -59,6 +54,7 @@ export class App extends Application {
     container.bind(CartService).toSelf()
     container.bind(CategoryRepository).toSelf()
     container.bind(CategoryService).toSelf()
+    container.bind(StripeService).toSelf()
     container.bind(JwtUtils).toSelf()
   }
 
@@ -90,9 +86,9 @@ export class App extends Application {
           return res.status(response.statusCode).json(response)
         }
 
-        if(err instanceof Error){
+        if (err instanceof Error) {
           const response = BaseHttpResponse.failed(err.message, 500)
-               
+
           return res.status(response.statusCode).json(response)
         }
         next()
@@ -100,10 +96,12 @@ export class App extends Application {
     })
     server.setConfig((app) => {
       app.use(express.json())
-      app.use(cors({
-        origin:process.env.HOST_URL,
-        credentials:true
-      }))
+      app.use(
+        cors({
+          origin:process.env.HOST_URL ??  "http://localhost:3000",
+          credentials: true,
+        })
+      )
       app.use(morgan(options.morgan.mode))
     })
     const app = server.build()

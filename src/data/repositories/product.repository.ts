@@ -29,7 +29,6 @@ export class ProductRepository {
                         },
                     },
                 },
-                // orderBy:{name:"desc"}
             })
                 : products = await this._dbContext.models.product.findMany({
                     include: {
@@ -39,7 +38,6 @@ export class ProductRepository {
                             },
                         },
                     },
-                    // orderBy:{name:"desc"}
                 })
 
     return { products, count }
@@ -82,7 +80,6 @@ export class ProductRepository {
             },
             include: { category: { select: { title: true } } },
             take: 5,
-            // skip: (payload.page - 1) * 2,
             skip: 5 * payload.page - 5,
             orderBy: { plu: "asc" },
         })
@@ -105,7 +102,6 @@ export class ProductRepository {
                 categoryId: payload.category,
             },
             take: 5,
-            // skip: (payload.page - 1) * 2,
             skip: 5 * payload.page - 5,
             orderBy: { plu: "asc" },
         })

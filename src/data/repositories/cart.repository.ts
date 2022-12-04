@@ -1,20 +1,21 @@
-import { Cart, SingleOrder, User } from "@prisma/client"
-import { injectable } from "inversify"
-import { CouldNotFindException } from "../../logic/exceptions"
-import { DBContext } from "../db.context"
+import { Cart, SingleOrder, User } from "@prisma/client";
+import { injectable } from "inversify";
+import { CouldNotFindException } from "../../logic/exceptions";
+import { DBContext } from "../db.context";
 
 @injectable()
 export class CartRepository {
   public constructor(private readonly _dbContext: DBContext) {}
 
   public async findById(id: User["id"]) {
+        console.log('repository id',id);
+        
     return this._dbContext.models.cart.findUnique({
       where: {
         userId: id,
       },
       include: {
         singleOrders: {
-          // include: { product: true },
           select:{id: true,amount: true,product: true,cartId:true}
         },
       },

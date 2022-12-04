@@ -1,15 +1,16 @@
-import { injectable } from "inversify"
 import bcrypt from "bcryptjs"
-import { CouldNotFindUserException, GenericError } from "../exceptions"
+import { injectable } from "inversify"
 import { UserRepository } from "../../data/repositories"
 import {
-  CreateUserDto,
-  GetOneUserDto,
-  SignInUserDto,
-  UpdateUserDto,
-  UserDto,
+    CreateUserDto,
+    GetOneUserDto,
+    SignInUserDto,
+    UpdateUserDto,
+    UserDto
 } from "../dtos/users"
+import { CouldNotFindUserException, GenericError } from "../exceptions"
 import { CartService } from "./cart.service"
+
 @injectable()
 export class UserService {
   public constructor(private readonly _userRepo: UserRepository,private readonly _cartService:CartService) {}
@@ -17,7 +18,6 @@ export class UserService {
   public async all() {
     const users = await this._userRepo.all()
 
-    //TODO: zmien users na UserDto i zobacz co sie zmienia
     return UserDto.fromMany(users)
   }
 
@@ -44,7 +44,7 @@ export class UserService {
       password: hashedPassword,
     })
 
-    const cart=await this._cartService.create({userId:createdUser.id,summary:0})
+    await this._cartService.create({userId:createdUser.id,summary:0})
 
     return UserDto.from(createdUser)
   }

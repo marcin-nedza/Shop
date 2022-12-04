@@ -1,23 +1,24 @@
 import { Request, Response } from "express"
 import {
-  controller,
-  httpDelete,
-  httpGet,
-  httpPost,
+    controller,
+    httpDelete,
+    httpGet,
+    httpPost
 } from "inversify-express-utils"
 import {
-  AddToCartDto,
-  CreateCartDto,
-  GetCartDto,
-  RemoveSingleOrderDto,
+    AddToCartDto,
+    CheckoutCartDto,
+    CreateCartDto,
+    GetCartDto,
+    RemoveSingleOrderDto
 } from "../../logic/dtos/cart"
-import { CartService } from "../../logic/services"
+import { CartService, StripeService } from "../../logic/services"
 import { BaseHttpResponse } from "../lib/base-http-response"
 import {
-  AttachUserId,
-  DeserializeUserMiddleware,
-  RequireUserMiddleware,
-  ValidateRequestMiddleware,
+    AttachUserId,
+    DeserializeUserMiddleware,
+    RequireUserMiddleware,
+    ValidateRequestMiddleware
 } from "../middleware"
 
 
@@ -28,7 +29,7 @@ import {
   RequireUserMiddleware.run()
 )
 export class CartController {
-  public constructor(private readonly _cartService: CartService) {}
+  public constructor(private readonly _cartService: CartService,private readonly _stripeService: StripeService) {}
 
   @httpGet("/", AttachUserId.attach, ValidateRequestMiddleware.with(GetCartDto))
   public async findById(req: Request, res: Response) {
@@ -58,13 +59,23 @@ export class CartController {
     ValidateRequestMiddleware.withParams(AddToCartDto)
   )
   public async addToCart(req: Request, res: Response) {
-    const cosik = await this._cartService.addToCart(req.body)
-    const response = BaseHttpResponse.success(cosik)
+    const cart = await this._cartService.addToCart(req.body)
+
+    const response = BaseHttpResponse.success(cart)
 
     res.status(response.statusCode).json(response)
   }
 
+ @httpPost('/checkout',
+    AttachUserId.attach,
+    ValidateRequestMiddleware.with(CheckoutCartDto))
+    public async checkout(req: Request, res: Response){
+        const session = await this._stripeService.stripeCreateSession(req.body.userId)
 
+        const response = BaseHttpResponse.success(session)
+
+        res.status(response.statusCode).json(response)
+    }
 
   @httpDelete(
     "/removeOne/:id/:singleOrderId",

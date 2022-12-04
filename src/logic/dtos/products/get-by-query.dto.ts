@@ -1,4 +1,3 @@
-import { CouldNotFindException } from "../../../logic/exceptions";
 
 export class GetByQueryDto{
     public constructor(public categoryId: string) {}
